@@ -1,0 +1,7 @@
+[package]
+name = "feldspar"
+version = "0.0.1"
+authors = ["Antoine Kalmbach <ane@iki.fi>"]
+
+[dependencies]
+time = "*"

@@ -1,0 +1,16 @@
+pub mod event;
+pub mod irssi;
+
+use self::
+
+pub trait Matcher {
+    fn regular(&self, input: &str) -> Option<event::Event>;
+    fn kick(&self, input: &str) -> Option<event::Event>;
+}
+
+pub fn match_line<M: Matcher>(m: &M, input: &str) -> Option<event::Event> {
+    m.regular(input)
+        .or(m.kick(input))
+}
+
+
