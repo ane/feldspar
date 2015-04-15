@@ -1,11 +1,12 @@
 use super::churn::Matcher;
 use super::event::Event;
+use time;
 
 use regex::Regex;
 
-static TimeStamp : regex::Regex = regex!(r"\d{2}:\d{2}");
-static Mode : regex::Regex = regex!(r"@&%+!\s");
-static Nick : regex::Regex = regex!(r"A-Za-z\[\]\\`_\^\{\|\}");
+static TimeStamp: Regex = regex!(r"\d{2}:\d{2}");
+static Mode: Regex = regex!(r"@&%+!\s");
+static Nick: Regex = regex!(r"A-Za-z\[\]\\`_\^\{\|\}");
 
 pub struct Irssi;
 
