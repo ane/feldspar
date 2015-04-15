@@ -1,7 +1,16 @@
-[package]
+[project]
 name = "feldspar"
 version = "0.0.1"
 authors = ["Antoine Kalmbach <ane@iki.fi>"]
 
 [dependencies]
 time = "*"
+regex = "*"
+regex_macros = "*"
+
+[lib]
+name = "feldspar"
+path = "src/feldspar/lib.rs"
+
+[[bin]]
+name = "feldspar"
