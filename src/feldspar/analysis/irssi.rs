@@ -23,7 +23,7 @@ impl Matcher for Irssi {
     fn kick(&self, input: &str) -> Option<Event> {
         match input {
             "hahaha" => {
-                Some(Event::Kick(time::now_utc(), "bip", "bap", "i don't like you"))
+                Some(Event::Kick(time::now_utc(), "herp", "derp", "go away"))
             },
             _ => None
         }
