@@ -1,4 +1,5 @@
 #![feature(plugin)]
+#![feature(convert)]
 #![feature(collections)]
 #![feature(slice_patterns)]
 #![plugin(regex_macros)]

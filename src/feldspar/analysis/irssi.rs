@@ -11,14 +11,19 @@ static Nick: Regex = regex!(r"[A-Za-z\[\]\\`_\^\{\|\}]+");
 pub struct Irssi;
 
 fn parse_timestamp(ts: &str) -> Option<time::Tm> {
-    let t: Vec<&str> = ts.split(':').collect();
-    let (h, m) = (t[0].parse::<i32>(), t[1].parse::<i32>());
-    match (h.ok(), m.ok()) {
-        (Some(hours), Some(min)) => {
-            let mut ts = time::empty_tm();
-            ts.tm_hour = hours;
-            ts.tm_min = min;
-            Some(ts)
+    match ts.split(':').collect::<Vec<&str>>().as_slice() {
+        [a, b] => {
+            let (h, m) = (a.parse::<i32>(), b.parse::<i32>());
+            match (h.ok(), m.ok()) {
+                (Some(hours), Some(min)) => {
+                    let mut ts = time::empty_tm();
+                    ts.tm_hour = hours;
+
+                    ts.tm_min = min;
+                    Some(ts)
+                },
+                _ => None,
+            }
         },
         _ => None,
     }
