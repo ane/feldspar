@@ -4,9 +4,9 @@ use time;
 
 use regex::Regex;
 
-static TimeStamp: Regex = regex!(r"\d{2}:\d{2}");
-static Mode: Regex = regex!(r"[@&%+!\s]");
-static Nick: Regex = regex!(r"[A-Za-z\[\]\\`_\^\{\|\}]+");
+static TIMESTAMP: Regex = regex!(r"\d{2}:\d{2}");
+static MODE: Regex = regex!(r"[@&%+!\s]");
+static NICK: Regex = regex!(r"[A-Za-z\[\]\\`_\^\{\|\}]+");
 
 pub struct Irssi;
 
@@ -31,7 +31,7 @@ fn parse_timestamp(ts: &str) -> Option<time::Tm> {
 
 impl Matcher for Irssi {
     fn regular(&self, input: &str) -> Option<Event> {
-        let raw = format!(r"^({})\s<{}({})>\s(.*)$", TimeStamp, Mode, Nick);
+        let raw = format!(r"^({})\s<{}({})>\s(.*)$", TIMESTAMP, MODE, NICK);
         let re = Regex::new(&raw).unwrap();
         re.captures(input).and_then(|caps| {
             match [caps.at(1), caps.at(2), caps.at(3)] {
