@@ -10,21 +10,34 @@ static Nick: Regex = regex!(r"[A-Za-z\[\]\\`_\^\{\|\}]+");
 
 pub struct Irssi;
 
+fn parse_timestamp(ts: &str) -> Option<time::Tm> {
+    let t: Vec<&str> = ts.split(':').collect();
+    let (h, m) = (t[0].parse::<i32>(), t[1].parse::<i32>());
+    match (h.ok(), m.ok()) {
+        (Some(hours), Some(min)) => {
+            let mut ts = time::empty_tm();
+            ts.tm_hour = hours;
+            ts.tm_min = min;
+            Some(ts)
+        },
+        _ => None,
+    }
+}
+
 impl Matcher for Irssi {
     fn regular(&self, input: &str) -> Option<Event> {
-        let raw = format!(r"^{}\s<{}({})>\s(.*)$", TimeStamp, Mode, Nick);
+        let raw = format!(r"^({})\s<{}({})>\s(.*)$", TimeStamp, Mode, Nick);
         let re = Regex::new(&raw).unwrap();
-        match re.captures(input) {
-            Some(caps) => {
-                match [caps.at(1), caps.at(2)] {
-                    [Some(nick), Some(cont)] => {
-                        Some(Event::Message(time::now_utc(), nick.to_string(), cont.to_string()))
-                    }
-                    _ => None,
-                }
-            },
-            None => None,
-        }
+        re.captures(input).and_then(|caps| {
+            match [caps.at(1), caps.at(2), caps.at(3)] {
+                [Some(tstamp), Some(nick), Some(cont)] => {
+                    parse_timestamp(tstamp).and_then(|ts| {
+                        Some(Event::Message(ts, nick.to_string(), cont.to_string()))
+                    })
+                },
+                _ => None,
+            }
+        })
     }
 
     fn kick(&self, input: &str) -> Option<Event> {
